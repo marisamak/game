@@ -6,6 +6,14 @@ def set_status(status_text, color='black'):
     canvas.itemconfig(text_id, text=status_text, fill=color)
 
 
+def menu_toggle():
+    global menu_mode
+    if menu_mode:
+        menu_hide()
+    else:
+        menu_show()
+
+
 def menu_create(canvas):
     global menu_options_id
     menu_options_id = []
@@ -159,20 +167,18 @@ x_finish = game_width - 50
 
 KEY_PLAYER1 = 39
 KEY_PLAYER2 = 68
-KEY_PAUSE = 19
+KEY_PAUSE = 32
 
 SPEED = 12
 
 game_over = False
 pause = False
 
-game_width = 800
-game_height = 800
 window = Tk()
-window.title('Меню игры')
+window.title('Game')
 
 canvas = Canvas(window, width=game_width, height=game_height, bg='white')
-canvas.pack()
+
 menu_create(canvas)
 player1 = canvas.create_rectangle(x1,
                                   y1,
@@ -197,4 +203,5 @@ text_id = canvas.create_text(x1,
                              text='Вперед!')
 
 window.bind('<KeyRelease>', key_handler)
+canvas.pack()
 window.mainloop()
