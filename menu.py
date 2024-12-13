@@ -2,7 +2,6 @@ from tkinter import *
 from pickle import load, dump
 
 
-
 def pause_toggle():
     global pause
     pause = not pause
@@ -22,6 +21,7 @@ def menu_enter(canvas, player1, player2):
         game_resume()
     elif menu_current_index == 1:
         game_new(canvas, player1, player2)
+
     elif menu_current_index == 2:
         game_save(canvas, player1, player2)
     elif menu_current_index == 3:
@@ -45,17 +45,25 @@ def game_resume():
     print('Возобновляем старую игру')
 
 
-
-
 def game_save(canvas, player1, player2):
-    print('Сохраняем игру')
-
+    print("Сохраняем игру")
+    x1, y1 = canvas.coords(player1)[:2]  # верхний левый угол
+    x2, y2 = canvas.coords(player2)[:2]
+    data = [(x1, y1), (x2, y2)]  # сохраняем позиции верхнего левого угла
+    with open('save.dat', 'wb') as f:
+        dump(data, f)
+    print("Сохранено!")
 
 
 def game_load(canvas, player1, player2):
-    print('Загружаем игру')
+    print("Загружаем игру")
+    with open('save.dat', 'rb') as f:
+        data = load(f)
+        (x1, y1), (x2, y2) = data
 
-
+        canvas.coords(player1, x1, y1, x1 + 100, y1 + 100)
+        canvas.coords(player2, x2, y2, x2 + 100, y2 + 100)
+        print("Загружено!")
 
 
 def game_exit():
@@ -67,6 +75,7 @@ def menu_show(canvas):
     global menu_mode
     menu_mode = True
     menu_update(canvas)
+
 
 def menu_hide(canvas):
     global menu_mode
@@ -111,6 +120,7 @@ def menu_create(canvas):
         menu_options_id.append(option_id)
         offest += 50
     menu_update(canvas)
+
 
 pause = False
 menu_mode = True
